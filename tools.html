@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ DEPPSEK TOOLS SUITE ⚡</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+<style>
+:root {
+    --accent: #00d4ff;
+    --accent-2: #a855f7;
+    --accent-3: #ff006e;
+    --accent-4: #ffd60a;
+    --bg-1: #050514;
+    --bg-2: #0a0a2e;
+    --bg-3: #000010;
+    --text: #e0e8ff;
+    --text-dim: #8892b0;
+    --card-bg: rgba(0, 212, 255, 0.05);
+    --border: rgba(0, 212, 255, 0.3);
+    --glass: rgba(168, 85, 247, 0.08);
+    --success: #00ff88;
+    --danger: #ff006e;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    background: var(--bg-1);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+    min-height: 100vh;
+    cursor: none;
+}
+
+@media (max-width: 768px) { body { cursor: auto; } }
+
+/* CURSOR */
+.cursor-dot {
+    width: 8px; height: 8px;
+    background: #00d4ff;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 99999;
+    transition: 0.1s;
+    box-shadow: 0 0 20px #00d4ff, 0 0 40px #a855f7;
+}
+.cursor-ring {
+    width: 40px; height: 40px;
+    border: 2px solid #a855f7;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 99998;
+    transition: 0.15s ease-out;
+    box-shadow: 0 0 30px #00d4ff, inset 0 0 20px rgba(168, 85, 247, 0.3);
+}
+@media (max-width: 768px) { .cursor-dot, .cursor-ring { display: none; } }
+
+/* BACKGROUND */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: 
+        radial-gradient(ellipse at 20% 30%, rgba(0, 212, 255, 0.15), transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(168, 85, 247, 0.15), transparent 50%),
+        radial-gradient(ellipse at 50% 100%, rgba(255, 0, 110, 0.1), transparent 50%);
+    animation: stormMove 15s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+@keyframes stormMove {
+    0% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(2deg); }
+    100% { transform: scale(1) rotate(-2deg); }
+}
+
+/* ============================================
+   LOGIN SCREEN (LAYAR 1)
+   ============================================ */
+#loginScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1), transparent 70%);
+    transition: opacity 0.8s, transform 0.8s;
+}
+
+#loginScreen.hidden {
+    opacity: 0;
+    transform: scale(1.2);
+    pointer-events: none;
+}
+
+.login-box {
+    background: rgba(5, 5, 20, 0.85);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--accent);
+    border-radius: 24px;
+    padding: 50px 40px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 
+        0 0 40px rgba(0, 212, 255, 0.4),
+        0 0 80px rgba(168, 85, 247, 0.2),
+        inset 0 0 40px rgba(0, 212, 255, 0.05);
+    animation: boxPulse 3s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes boxPulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.4), 0 0 80px rgba(168, 85, 247, 0.2); }
+    50% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.6), 0 0 100px rgba(168, 85, 247, 0.4); }
+}
+
+.login-box::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(0, 212, 255, 0.1), transparent, rgba(168, 85, 247, 0.1), transparent);
+    animation: raysRotate 10s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes raysRotate { to { transform: rotate(360deg); } }
+
+.login-logo {
+    font-size: 70px;
+    margin-bottom: 15px;
+    animation: bounce 2s infinite;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 20px #00d4ff);
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.login-title {
+    font-size: 28px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00d4ff, #a855f7, #ff006e);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientMove 3s linear infinite;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 1px;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+.login-subtitle {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.login-input {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(0, 212, 255, 0.05);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 15px;
+    transition: 0.3s;
+    position: relative;
+    z-index: 1;
+    font-family: inherit;
+}
+
+.login-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.4);
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.login-input::placeholder {
+    color: var(--text-dim);
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #00d4ff, #a855f7);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    text-transform: uppercase;
+    font-family: inherit;
+}
+
+.login-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5), 0 0 60px rgba(168, 85, 247, 0.3);
+}
+
+.login-btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+.login-error {
+    color: var(--danger);
+    font-size: 13px;
+    margin-top: 15px;
+    min-height: 20px;
+    position: relative;
+    z-index: 1;
+    font-weight: bold;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.login-info {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+    position: relative;
+    z-index: 1;
+    line-height: 1.6;
+}
+
+.login-info strong {
+    color: var(--accent);
+    font-family: monospace;
+}
+
+/* ============================================
+   DASHBOARD (LAYAR 2)
+   ============================================ */
+#dashboard {
+    display: none;
+    min-height: 100vh;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.8s;
+}
+
+#dashboard.show {
+    display: block;
+    opacity: 1;
+}
+
+.dash-header {
+    text-align: center;
+    padding: 30px 20px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--border);
+    position: relative;
+}
+
+.dash-title {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 900;
+    background: linear-gradient(90deg, #00d4ff, #a855f7, #ff006e, #ffd60a, #00d4ff);
+    background-size: 400% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientMove 3s linear infinite;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+}
+
+.dash-welcome {
+    color: var(--text-dim);
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.dash-welcome strong {
+    color: var(--accent);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+}
+
+/* ============================================
+   LOGOUT BUTTON — RAPIH + GRADIENT
+   ============================================ */
+.logout-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: linear-gradient(135deg, #ff006e 0%, #a855f7 100%);
+    border: none;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: inherit;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 
+        0 5px 20px rgba(255, 0, 110, 0.5),
+        0 0 40px rgba(168, 85, 247, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: absolute;
+    overflow: hidden;
+    animation: logoutPulse 2.5s ease-in-out infinite;
+}
+
+.logout-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: 0.6s;
+}
+
+.logout-btn:hover::before {
+    left: 100%;
+}
+
+.logout-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 
+        0 8px 30px rgba(255, 0, 110, 0.7),
+        0 0 60px rgba(168, 85, 247, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.logout-btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+@keyframes logoutPulse {
+    0%, 100% {
+        box-shadow: 
+            0 5px 20px rgba(255, 0, 110, 0.5),
+            0 0 40px rgba(168, 85, 247, 0.3);
+    }
+    50% {
+        box-shadow: 
+            0 5px 25px rgba(255, 0, 110, 0.7),
+            0 0 60px rgba(168, 85, 247, 0.5);
+    }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .logout-btn {
+        top: 15px;
+        right: 15px;
+        padding: 10px 18px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logout-btn {
+        top: 10px;
+        right: 10px;
+        padding: 8px 14px;
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+}
+
+/* TOOLS GRID */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 10px 100px;
+}
+
+.tool-card {
+    background: rgba(5, 5, 20, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 25px;
+    cursor: pointer;
+    transition: 0.4s;
+    position: relative;
+    overflow: hidden;
+    animation: cardIn 0.6s ease-out backwards;
+}
+
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tool-card:nth-child(1) { animation-delay: 0.05s; }
+.tool-card:nth-child(2) { animation-delay: 0.10s; }
+.tool-card:nth-child(3) { animation-delay: 0.15s; }
+.tool-card:nth-child(4) { animation-delay: 0.20s; }
+.tool-card:nth-child(5) { animation-delay: 0.25s; }
+.tool-card:nth-child(6) { animation-delay: 0.30s; }
+.tool-card:nth-child(7) { animation-delay: 0.35s; }
+.tool-card:nth-child(8) { animation-delay: 0.40s; }
+.tool-card:nth-child(9) { animation-delay: 0.45s; }
+.tool-card:nth-child(10) { animation-delay: 0.50s; }
+
+.tool-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(0, 212, 255, 0.15), transparent 60%);
+    opacity: 0;
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+.tool-card:hover::before { opacity: 1; }
+
+.tool-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        0 15px 40px rgba(0, 212, 255, 0.3),
+        0 0 60px rgba(168, 85, 247, 0.2);
+}
+
+.tool-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+    position: relative;
+    z-index: 1;
+}
+
+.tool-name {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+}
+
+.tool-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    position: relative;
+    z-index: 1;
+}
+
+.tool-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    color: #fff;
+    font-weight: 900;
+    letter-spacing: 1px;
+    z-index: 1;
+    text-transform: uppercase;
+}
+
+/* ============================================
+   MODAL TOOL
+   ============================================ */
+.tool-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s;
+}
+
+.tool-modal.show {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-box {
+    background: rgba(5, 5, 20, 0.95);
+    border: 2px solid var(--accent);
+    border-radius: 24px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
+    box-shadow: 
+        0 0 60px rgba(0, 212, 255, 0.5),
+        0 0 100px rgba(168, 85, 247, 0.3);
+    animation: modalIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.8) translateY(30px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px dashed var(--border);
+}
+
+.modal-title {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+}
+
+.modal-close {
+    background: rgba(255, 0, 110, 0.2);
+    border: 2px solid var(--danger);
+    color: var(--danger);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+}
+
+.modal-close:hover {
+    background: var(--danger);
+    color: #fff;
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 0 20px var(--danger);
+}
+
+.modal-body {
+    color: var(--text);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-input, .form-textarea, .form-select {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(0, 212, 255, 0.05);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.form-textarea { min-height: 100px; }
+
+.action-btn {
+    background: linear-gradient(135deg, #00d4ff, #a855f7);
+    border: none;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: inherit;
+    letter-spacing: 1px;
+    margin: 5px 5px 5px 0;
+    text-transform: uppercase;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 212, 255, 0.4), 0 0 40px rgba(168, 85, 247, 0.2);
+}
+
+.action-btn:active { transform: translateY(0) scale(0.98); }
+
+.action-btn.secondary {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+}
+
+.action-btn.secondary:hover {
+    background: var(--accent);
+    color: #000;
+}
+
+.action-btn.danger {
+    background: linear-gradient(135deg, #ff006e, #a855f7);
+}
+
+.result-box {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    min-height: 60px;
+    font-family: monospace;
+    font-size: 14px;
+    color: var(--accent);
+    word-break: break-all;
+    white-space: pre-wrap;
+    display: none;
+}
+
+.result-box.show { display: block; animation: resultIn 0.4s; }
+
+@keyframes resultIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.result-label {
+    color: var(--accent-2);
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+}
+
+.color-preview {
+    width: 100%;
+    height: 120px;
+    border-radius: 12px;
+    margin: 15px 0;
+    border: 2px solid var(--border);
+    transition: 0.3s;
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.3) inset;
+}
+
+.qr-container {
+    text-align: center;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+
+.qr-container img, .qr-container canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+.badge-count {
+    display: inline-block;
+    background: linear-gradient(135deg, #00d4ff, #a855f7);
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+/* TOAST */
+#toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(5, 5, 20, 0.95);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+    font-weight: bold;
+    transform: translateX(500px);
+    transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 99999;
+    max-width: 300px;
+    font-size: 14px;
+}
+
+#toast.show { transform: translateX(0); }
+
+/* LIGHTNING */
+#lightningOverlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0;
+    background: radial-gradient(circle at var(--lx, 50%) var(--ly, 50%), rgba(255, 255, 255, 0.9), rgba(0, 212, 255, 0.4), transparent 60%);
+}
+
+#lightningOverlay.flash { animation: lightningFlash 0.4s ease-out; }
+
+@keyframes lightningFlash {
+    0% { opacity: 0; } 10% { opacity: 1; } 20% { opacity: 0.2; }
+    30% { opacity: 0.9; } 50% { opacity: 0.3; } 100% { opacity: 0; }
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-1); }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #00d4ff, #a855f7);
+    border-radius: 10px;
+    border: 2px solid var(--bg-1);
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .login-box { padding: 35px 25px; }
+    .login-logo { font-size: 55px; }
+    .login-title { font-size: 22px; }
+    .modal-box { padding: 20px; }
+    .modal-title { font-size: 18px; }
+    .tool-icon { font-size: 32px; }
+    .tool-name { font-size: 16px; }
+    .logout-btn { padding: 8px 14px; font-size: 11px; top: 10px; right: 10px; }
+    .tools-grid { grid-template-columns: 1fr; padding: 0 5px 80px; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<!-- LIGHTNING -->
+<div id="lightningOverlay"></div>
+
+<!-- ============================================
+     LOGIN SCREEN (LAYAR 1)
+     ============================================ -->
+<div id="loginScreen">
+    <div class="login-box">
+        <div class="login-logo">⚡</div>
+        <h1 class="login-title">DEPPSEK TOOLS</h1>
+        <p class="login-subtitle">10 Tools Ultimate Edition</p>
+
+        <input type="text" class="login-input" id="loginUser" placeholder="👤 Username" autocomplete="off">
+        <input type="password" class="login-input" id="loginPass" placeholder="🔒 Password" autocomplete="off">
+        
+        <button class="login-btn" onclick="doLogin()">🚀 MASUK</button>
+        
+        <div class="login-error" id="loginError"></div>
+
+        <div class="login-info">
+            <strong>Demo Login:</strong><br>
+            Username: <strong>VINZXCYY</strong><br>
+            Password: <strong>deppsek2025</strong>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================
+     DASHBOARD (LAYAR 2)
+     ============================================ -->
+<div id="dashboard">
+    <div class="dash-header">
+        <h1 class="dash-title">⚡ DEPPSEK TOOLS ⚡</h1>
+        <p class="dash-welcome">Selamat datang, <strong id="userName">Tuan</strong> 🥶</p>
+        <button class="logout-btn" onclick="doLogout()">
+    <span>🚪</span> LOGOUT
+</button>
+    </div>
+
+    <div class="tools-grid">
+        <!-- 23: Password Generator -->
+        <div class="tool-card" onclick="openTool('password')">
+            <span class="tool-badge">🔐 TOOL</span>
+            <span class="tool-icon">🔐</span>
+            <div class="tool-name">Password Generator</div>
+            <div class="tool-desc">Bikin password super kuat & aman</div>
+        </div>
+
+        <!-- 24: Color Picker -->
+        <div class="tool-card" onclick="openTool('color')">
+            <span class="tool-badge">🎨 TOOL</span>
+            <span class="tool-icon">🎨</span>
+            <div class="tool-name">Color Picker</div>
+            <div class="tool-desc">Pilih & konversi warna HEX/RGB</div>
+        </div>
+
+        <!-- 25: QR Code Generator -->
+        <div class="tool-card" onclick="openTool('qr')">
+            <span class="tool-badge">📱 TOOL</span>
+            <span class="tool-icon">📱</span>
+            <div class="tool-name">QR Code Generator</div>
+                        <div class="tool-desc">Bikin QR Code dari teks/link</div>
+        </div>
+
+        <!-- 26: Image Compressor -->
+        <div class="tool-card" onclick="openTool('image')">
+            <span class="tool-badge">🖼️ TOOL</span>
+            <span class="tool-icon">🖼️</span>
+            <div class="tool-name">Image Compressor</div>
+            <div class="tool-desc">Kompres gambar langsung di browser</div>
+        </div>
+
+        <!-- 27: To-Do List -->
+        <div class="tool-card" onclick="openTool('todo')">
+            <span class="tool-badge">📝 TOOL</span>
+            <span class="tool-icon">📝</span>
+            <div class="tool-name">To-Do List</div>
+            <div class="tool-desc">Catat tugas harian otomatis</div>
+        </div>
+
+        <!-- 28: Currency Converter -->
+        <div class="tool-card" onclick="openTool('currency')">
+            <span class="tool-badge">💱 TOOL</span>
+            <span class="tool-icon">💱</span>
+            <div class="tool-name">Currency Converter</div>
+            <div class="tool-desc">Konversi mata uang real-time</div>
+        </div>
+
+        <!-- 29: Pomodoro Timer -->
+        <div class="tool-card" onclick="openTool('pomodoro')">
+            <span class="tool-badge">⏱️ TOOL</span>
+            <span class="tool-icon">⏱️</span>
+            <div class="tool-name">Pomodoro Timer</div>
+            <div class="tool-desc">Timer belajar 25-5 menit</div>
+        </div>
+
+        <!-- 30: Calculator -->
+        <div class="tool-card" onclick="openTool('calc')">
+            <span class="tool-badge">🧮 TOOL</span>
+            <span class="tool-icon">🧮</span>
+            <div class="tool-name">Scientific Calculator</div>
+            <div class="tool-desc">Kalkulator ilmiah lengkap</div>
+        </div>
+
+        <!-- 31: Text Tools -->
+        <div class="tool-card" onclick="openTool('text')">
+            <span class="tool-badge">📋 TOOL</span>
+            <span class="tool-icon">📋</span>
+            <div class="tool-name">Text Tools</div>
+            <div class="tool-desc">Hitung kata, huruf, ubah case</div>
+        </div>
+
+        <!-- 32: Notes -->
+        <div class="tool-card" onclick="openTool('notes')">
+            <span class="tool-badge">📔 TOOL</span>
+            <span class="tool-icon">📔</span>
+            <div class="tool-name">Notes</div>
+            <div class="tool-desc">Catatan multi-tab otomatis tersimpan</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================
+     MODAL WRAPPER
+     ============================================ -->
+<div class="tool-modal" id="toolModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">Tool</h2>
+            <button class="modal-close" onclick="closeTool()">✕</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+/* ============================================
+   LOGIN SYSTEM
+   ============================================ */
+/* ============================================
+   ⚙️ CONFIG — UBAH DI SINI AJA TUAN!
+   ============================================ */
+const CONFIG = {
+    // 🔐 LOGIN
+    USERNAME: "VINZXCYY",
+    PASSWORD: "deppsek2025",
+
+    // 🏷️ TITLE WEBSITE
+    TITLE: "⚡ DEPPSEK TOOLS ⚡",
+    
+    // 👋 UCAPAN SELAMAT DATANG
+    WELCOME: "Selamat datang",
+
+    // 🎨 WARNA TEMA
+    COLOR_1: "#00d4ff",  // Biru Cyan
+    COLOR_2: "#a855f7",  // Ungu
+    COLOR_3: "#ff006e",  // Pink/Merah
+    COLOR_4: "#ffd60a",  // Kuning
+
+    // 🎭 EMOJI LOGO
+    LOGO: "⚡",
+};
+
+// Auto-apply config ke halaman
+document.addEventListener('DOMContentLoaded', () => {
+    // Update title
+    const dashTitle = document.querySelector('.dash-title');
+    if (dashTitle) dashTitle.textContent = CONFIG.TITLE;
+    
+    // Update welcome text
+    const welcome = document.querySelector('.dash-welcome');
+    if (welcome) welcome.innerHTML = CONFIG.WELCOME + ', <strong id="userName">Tuan</strong> 🥶';
+    
+    // Update CSS variables
+    document.documentElement.style.setProperty('--accent', CONFIG.COLOR_1);
+    document.documentElement.style.setProperty('--accent-2', CONFIG.COLOR_2);
+    document.documentElement.style.setProperty('--accent-3', CONFIG.COLOR_3);
+    document.documentElement.style.setProperty('--accent-4', CONFIG.COLOR_4);
+    
+    // Update login title
+    const loginTitle = document.querySelector('.login-title');
+    if (loginTitle) loginTitle.textContent = CONFIG.TITLE.replace(/⚡/g, '').trim();
+    
+    // Update login logo
+    const loginLogo = document.querySelector('.login-logo');
+    if (loginLogo) loginLogo.textContent = CONFIG.LOGO;
+});
+
+// Pakai di fungsi login
+const VALID_USER = CONFIG.USERNAME;
+const VALID_PASS = CONFIG.PASSWORD;
+
+function doLogin() {
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    const err = document.getElementById('loginError');
+
+    if (!user || !pass) {
+        err.textContent = "⚠️ Isi username & password dulu!";
+        triggerLightning();
+        return;
+    }
+
+    if (user === VALID_USER && pass === VALID_PASS) {
+        err.textContent = "";
+        localStorage.setItem('deppsekLoggedIn', 'true');
+        localStorage.setItem('deppsekUser', user);
+        triggerLightning();
+        setTimeout(triggerLightning, 150);
+        showToast('⚡ Login berhasil! Selamat datang Tuan!');
+        setTimeout(() => {
+            document.getElementById('loginScreen').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').classList.add('show');
+                document.getElementById('userName').textContent = user;
+            }, 800);
+        }, 500);
+    } else {
+        err.textContent = "❌ Username atau password salah!";
+        triggerLightning();
+        showToast('❌ Login gagal!');
+    }
+}
+
+function doLogout() {
+    if (confirm('Yakin mau logout, Tuan?')) {
+        localStorage.removeItem('deppsekLoggedIn');
+        localStorage.removeItem('deppsekUser');
+        location.reload();
+    }
+}
+
+window.addEventListener('load', () => {
+    if (localStorage.getItem('deppsekLoggedIn') === 'true') {
+        const user = localStorage.getItem('deppsekUser') || VALID_USER;
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').classList.add('show');
+        document.getElementById('userName').textContent = user;
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) {
+        doLogin();
+    }
+});
+
+/* ============================================
+   TOAST
+   ============================================ */
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+/* ============================================
+   LIGHTNING
+   ============================================ */
+function triggerLightning() {
+    const overlay = document.getElementById('lightningOverlay');
+    overlay.style.setProperty('--lx', Math.random() * 100 + '%');
+    overlay.style.setProperty('--ly', Math.random() * 100 + '%');
+    overlay.classList.remove('flash');
+    void overlay.offsetWidth;
+    overlay.classList.add('flash');
+    setTimeout(() => overlay.classList.remove('flash'), 500);
+}
+setInterval(() => { if (Math.random() > 0.7) triggerLightning(); }, 6000);
+
+/* ============================================
+   CURSOR
+   ============================================ */
+const dot = document.querySelector('.cursor-dot');
+const ring = document.querySelector('.cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    if (dot) { dot.style.left = (mx - 4) + 'px'; dot.style.top = (my - 4) + 'px'; }
+});
+function animCursor() {
+    rx += (mx - rx) * 0.15;
+    ry += (my - ry) * 0.15;
+    if (ring) { ring.style.left = (rx - 20) + 'px'; ring.style.top = (ry - 20) + 'px'; }
+    requestAnimationFrame(animCursor);
+}
+animCursor();
+
+document.querySelectorAll('.tool-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+    });
+});
+
+/* ============================================
+   TOOL MODAL SYSTEM
+   ============================================ */
+function openTool(tool) {
+    const modal = document.getElementById('toolModal');
+    const title = document.getElementById('modalTitle');
+    const body = document.getElementById('modalBody');
+
+    const tools = {
+        password: { title: '🔐 Password Generator', render: renderPassword },
+        color: { title: '🎨 Color Picker', render: renderColor },
+        qr: { title: '📱 QR Code Generator', render: renderQR },
+        image: { title: '🖼️ Image Compressor', render: renderImage },
+        todo: { title: '📝 To-Do List', render: renderTodo },
+        currency: { title: '💱 Currency Converter', render: renderCurrency },
+        pomodoro: { title: '⏱️ Pomodoro Timer', render: renderPomodoro },
+        calc: { title: '🧮 Scientific Calculator', render: renderCalc },
+        text: { title: '📋 Text Tools', render: renderText },
+        notes: { title: '📔 Notes', render: renderNotes }
+    };
+
+    if (!tools[tool]) return;
+    title.textContent = tools[tool].title;
+    body.innerHTML = '';
+    tools[tool].render(body);
+    modal.classList.add('show');
+    triggerLightning();
+}
+
+function closeTool() {
+    document.getElementById('toolModal').classList.remove('show');
+}
+
+document.getElementById('toolModal').addEventListener('click', (e) => {
+    if (e.target.id === 'toolModal') closeTool();
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeTool();
+});
+
+/* ============================================
+   TOOL 23 — PASSWORD GENERATOR
+   ============================================ */
+function renderPassword(el) {
+    el.innerHTML = '<div class="form-group"><label class="form-label">Panjang Password: <span id="passLen">16</span></label><input type="range" min="4" max="64" value="16" id="passLength" class="form-input" style="padding:0;height:auto;" oninput="document.getElementById(\'passLen\').textContent=this.value"></div><div class="form-group"><label class="form-label"><input type="checkbox" id="passUpper" checked> Huruf Besar (A-Z)</label><br><label class="form-label"><input type="checkbox" id="passLower" checked> Huruf Kecil (a-z)</label><br><label class="form-label"><input type="checkbox" id="passNum" checked> Angka (0-9)</label><br><label class="form-label"><input type="checkbox" id="passSym" checked> Simbol (!@#$%)</label></div><button class="action-btn" onclick="generatePassword()">🎲 Generate Password</button><div class="result-box" id="passResult"></div>';
+}
+
+function generatePassword() {
+    const len = parseInt(document.getElementById('passLength').value);
+    const upper = document.getElementById('passUpper').checked;
+    const lower = document.getElementById('passLower').checked;
+    const num = document.getElementById('passNum').checked;
+    const sym = document.getElementById('passSym').checked;
+    let chars = '';
+    if (upper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (lower) chars += 'abcdefghijklmnopqrstuvwxyz';
+    if (num) chars += '0123456789';
+    if (sym) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    if (!chars) { showToast('⚠️ Pilih minimal 1 opsi!'); return; }
+    let pass = '';
+    const array = new Uint32Array(len);
+    crypto.getRandomValues(array);
+    for (let i = 0; i < len; i++) pass += chars[array[i] % chars.length];
+    let strength = 'Weak', sc = '#ff006e';
+    if (len >= 12 && upper && lower && num && sym) { strength = 'SUPER STRONG 🔥'; sc = '#00ff88'; }
+    else if (len >= 10 && (upper || lower) && num) { strength = 'Strong'; sc = '#00d4ff'; }
+    else if (len >= 8) { strength = 'Medium'; sc = '#ffd60a'; }
+    const r = document.getElementById('passResult');
+    r.innerHTML = '<span class="result-label">Password Baru:</span>' + pass + '<br><br><span class="result-label">Kekuatan:</span><span style="color:' + sc + ';font-weight:bold;">' + strength + '</span>';
+    r.classList.add('show');
+    showToast('🔐 Password berhasil dibuat!');
+}
+
+/* ============================================
+   TOOL 24 — COLOR PICKER
+   ============================================ */
+function renderColor(el) {
+    el.innerHTML = '<div class="form-group"><label class="form-label">Pilih Warna</label><input type="color" id="colorPicker" value="#00d4ff" class="form-input" style="height:60px;cursor:pointer;padding:5px;" oninput="updateColor()"></div><div class="color-preview" id="colorPreview" style="background:#00d4ff;"></div><div class="result-box show" id="colorResult"></div><button class="action-btn" onclick="copyColor()">📋 Copy HEX</button><button class="action-btn secondary" onclick="randomColor()">🎲 Random</button>';
+    updateColor();
+}
+
+function updateColor() {
+    const color = document.getElementById('colorPicker').value;
+    document.getElementById('colorPreview').style.background = color;
+    const r = parseInt(color.substr(1, 2), 16);
+    const g = parseInt(color.substr(3, 2), 16);
+    const b = parseInt(color.substr(5, 2), 16);
+    const r1 = r / 255, g1 = g / 255, b1 = b / 255;
+    const max = Math.max(r1, g1, b1), min = Math.min(r1, g1, b1);
+    let h, s, l = (max + min) / 2;
+    if (max === min) { h = s = 0; }
+    else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+            case r1: h = (g1 - b1) / d + (g1 < b1 ? 6 : 0); break;
+            case g1: h = (b1 - r1) / d + 2; break;
+            case b1: h = (r1 - g1) / d + 4; break;
+        }
+        h /= 6;
+    }
+    document.getElementById('colorResult').innerHTML = '<span class="result-label">HEX:</span> ' + color.toUpperCase() + '<br><span class="result-label">RGB:</span> rgb(' + r + ', ' + g + ', ' + b + ')<br><span class="result-label">HSL:</span> hsl(' + Math.round(h*360) + ', ' + Math.round(s*100) + '%, ' + Math.round(l*100) + '%)';
+}
+
+function copyColor() {
+    const color = document.getElementById('colorPicker').value;
+    navigator.clipboard.writeText(color.toUpperCase());
+    showToast('📋 HEX di-copy: ' + color.toUpperCase());
+}
+
+function randomColor() {
+    const random = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+    document.getElementById('colorPicker').value = random;
+    updateColor();
+    showToast('🎲 Warna random!');
+}
+
+/* ============================================
+   TOOL 25 — QR CODE GENERATOR
+   ============================================ */
+function renderQR(el) {
+    el.innerHTML = '<div class="form-group"><label class="form-label">Masukkan Teks / Link</label><textarea class="form-textarea" id="qrText" placeholder="https://example.com..."></textarea></div><div class="form-group"><label class="form-label">Ukuran (px)</label><input type="number" class="form-input" id="qrSize" value="250" min="100" max="500"></div><button class="action-btn" onclick="generateQR()">📱 Generate QR Code</button><div id="qrResult"></div>';
+}
+
+function generateQR() {
+    const text = document.getElementById('qrText').value.trim();
+    const size = parseInt(document.getElementById('qrSize').value) || 250;
+    if (!text) { showToast('⚠️ Isi teks dulu!'); return; }
+    document.getElementById('qrResult').innerHTML = '<div class="qr-container"><img src="https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&data=' + encodeURIComponent(text) + '" alt="QR Code"></div>';
+    showToast('📱 QR Code dibuat!');
+}
+
+/* ============================================
+   TOOL 26 — IMAGE COMPRESSOR
+   ============================================ */
+let imgFile = null;
+
+function renderImage(el) {
+    el.innerHTML = '<div class="form-group"><label class="form-label">Pilih Gambar</label><input type="file" class="form-input" id="imgInput" accept="image/*" onchange="previewImage()"></div><div class="form-group"><label class="form-label">Kualitas: <span id="imgQualityVal">80</span>%</label><input type="range" class="form-input" id="imgQuality" min="10" max="100" value="80" style="padding:0;height:auto;" oninput="document.getElementById(\'imgQualityVal\').textContent=this.value"></div><button class="action-btn" onclick="compressImage()">🗜️ Kompres Gambar</button><div id="imgPreview" style="margin-top:15px;"></div>';
+}
+
+function previewImage() {
+    const file = document.getElementById('imgInput').files[0];
+    if (!file) return;
+    imgFile = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        document.getElementById('imgPreview').innerHTML = '<span class="result-label">Preview:</span><img src="' + e.target.result + '" style="max-width:100%;border-radius:12px;margin-top:10px;max-height:200px;"><p style="font-size:12px;color:var(--text-dim);margin-top:10px;">📏 Ukuran: ' + (file.size/1024).toFixed(2) + ' KB</p>';
+    };
+    reader.readAsDataURL(file);
+}
+
+function compressImage() {
+    if (!imgFile) { showToast('⚠️ Pilih gambar dulu!'); return; }
+    const quality = parseInt(document.getElementById('imgQuality').value) / 100;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width; canvas.height = img.height;
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            const compressed = canvas.toDataURL('image/jpeg', quality);
+            const origSize = imgFile.size;
+            const compSize = Math.round((compressed.length - 22) * 3 / 4);
+            document.getElementById('imgPreview').innerHTML += '<span class="result-label" style="display:block;margin-top:20px;">Hasil:</span><img src="' + compressed + '" style="max-width:100%;border-radius:12px;margin-top:10px;max-height:200px;"><p style="font-size:12px;color:var(--text-dim);margin-top:10px;">📏 Baru: ' + (compSize/1024).toFixed(2) + ' KB<br>📉 Hemat: ' + ((1 - compSize/origSize) * 100).toFixed(1) + '%</p><a href="' + compressed + '" download="compressed.jpg" class="action-btn" style="text-decoration:none;display:inline-block;margin-top:10px;">⬇️ Download</a>';
+            showToast('🗜️ Selesai!');
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(imgFile);
+}
+
+/* ============================================
+   TOOL 27 — TO-DO LIST
+   ============================================ */
+function renderTodo(el) {
+    el.innerHTML = '<div class="form-group"><input type="text" class="form-input" id="todoInput" placeholder="Tulis tugas baru..." onkeydown="if(event.key===\'Enter\')addTodo()"></div><button class="action-btn" onclick="addTodo()">➕ Tambah</button><button class="action-btn secondary" onclick="clearTodos()">🗑️ Hapus Semua</button><div class="badge-count" id="todoCount">0 Tugas</div><div id="todoList" style="margin-top:15px;"></div>';
+    loadTodos();
+}
+
+function getTodos() { try { return JSON.parse(localStorage.getItem('deppsekTodos') || '[]'); } catch(e) { return []; } }
+function saveTodos(t) { localStorage.setItem('deppsekTodos', JSON.stringify(t)); }
+
+function addTodo() {
+    const input = document.getElementById('todoInput');
+    const text = input.value.trim();
+    if (!text) { showToast('⚠️ Isi tugas!'); return; }
+    const todos = getTodos();
+    todos.push({ text, done: false, id: Date.now() });
+    saveTodos(todos);
+    input.value = '';
+    loadTodos();
+    showToast('✅ Ditambahkan!');
+}
+function toggleTodo(id) {
+    const todos = getTodos();
+    const t = todos.find(x => x.id === id);
+    if (t) { t.done = !t.done; saveTodos(todos); loadTodos(); }
+}
+function deleteTodo(id) { saveTodos(getTodos().filter(t => t.id !== id)); loadTodos(); showToast('🗑️ Dihapus!'); }
+function clearTodos() {
+    if (getTodos().length === 0) return;
+    if (confirm('Hapus semua?')) { saveTodos([]); loadTodos(); showToast('🗑️ Semua dihapus!'); }
+}
+function loadTodos() {
+    const todos = getTodos();
+    const list = document.getElementById('todoList');
+    const count = document.getElementById('todoCount');
+    if (!list) return;
+    count.textContent = todos.length + ' Tugas (' + todos.filter(t => t.done).length + ' selesai)';
+    if (todos.length === 0) { list.innerHTML = '<p style="text-align:center;color:var(--text-dim);padding:20px;">Belum ada tugas.</p>'; return; }
+    list.innerHTML = todos.map(t => '<div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(0,212,255,0.05);border:1px solid ' + (t.done ? 'rgba(0,255,136,0.5)' : 'var(--border)') + ';border-radius:10px;margin-bottom:8px;"><input type="checkbox" ' + (t.done ? 'checked' : '') + ' onchange="toggleTodo(' + t.id + ')" style="width:20px;height:20px;cursor:pointer;accent-color:#00d4ff;"><span style="flex:1;' + (t.done ? 'text-decoration:line-through;color:var(--text-dim);' : '') + '">' + escapeHtml(t.text) + '</span><button onclick="deleteTodo(' + t.id + ')" style="background:rgba(255,0,110,0.2);border:1px solid #ff006e;color:#ff006e;width:30px;height:30px;border-radius:6px;cursor:pointer;">✕</button></div>').join('');
+}
+
+/* ============================================
+   TOOL 28 — CURRENCY CONVERTER
+   ============================================ */
+function renderCurrency(el) {
+    el.innerHTML = '<div class="form-group"><label class="form-label">Jumlah</label><input type="number" class="form-input" id="curAmount" value="100000" step="any"></div><div class="form-group"><label class="form-label">Dari</label><select class="form-select" id="curFrom"><option value="IDR" selected>🇮🇩 IDR</option><option value="USD">🇺🇸 USD</option><option value="EUR">🇪🇺 EUR</option><option value="JPY">🇯🇵 JPY</option><option value="SGD">🇸🇬 SGD</option><option value="MYR">🇲🇾 MYR</option><option value="GBP">🇬🇧 GBP</option><option value="AUD">🇦🇺 AUD</option><option value="CNY">🇨🇳 CNY</option><option value="KRW">🇰🇷 KRW</option></select></div><div class="form-group"><label class="form-label">Ke</label><select class="form-select" id="curTo"><option value="IDR">🇮🇩 IDR</option><option value="USD" selected>🇺🇸 USD</option><option value="EUR">🇪🇺 EUR</option><option value="JPY">🇯🇵 JPY</option><option value="SGD">🇸🇬 SGD</option><option value="MYR">🇲🇾 MYR</option><option value="GBP">🇬🇧 GBP</option><option value="AUD">🇦🇺 AUD</option><option value="CNY">🇨🇳 CNY</option><option value="KRW">🇰🇷 KRW</option></select></div><button class="action-btn" onclick="convertCurrency()">💱 Konversi</button><div class="result-box" id="curResult"></div>';
+}
+
+const FALLBACK_RATES = { USD: 1, IDR: 15800, EUR: 0.92, JPY: 149, SGD: 1.34, MYR: 4.7, GBP: 0.79, AUD: 1.52, CNY: 7.24, KRW: 1330 };
+
+async function convertCurrency() {
+    const amount = parseFloat(document.getElementById('curAmount').value) || 0;
+    const from = document.getElementById('curFrom').value;
+    const to = document.getElementById('curTo').value;
+    const result = document.getElementById('curResult');
+    if (amount <= 0) { showToast('⚠️ Jumlah > 0!'); return; }
+    result.classList.add('show');
+    result.innerHTML = '<span class="result-label">Menghitung...</span> ⏳';
+    try {
+        const res = await fetch('https://api.exchangerate-api.com/v4/latest/' + from);
+        const data = await res.json();
+        const rate = data.rates[to];
+        const converted = (amount * rate).toFixed(2);
+        result.innerHTML = '<span class="result-label">Hasil:</span>' + amount.toLocaleString('id-ID') + ' ' + from + ' = <strong style="color:#00ff88;font-size:18px;">' + parseFloat(converted).toLocaleString('id-ID') + ' ' + to + '</strong><br><br><span class="result-label">Rate:</span>1 ' + from + ' = ' + rate + ' ' + to;
+        showToast('💱 Berhasil!');
+    } catch (e) {
+        const rate = FALLBACK_RATES[to] / FALLBACK_RATES[from];
+        const converted = (amount * rate).toFixed(2);
+        result.innerHTML = '<span class="result-label">Hasil:</span>' + amount.toLocaleString('id-ID') + ' ' + from + ' = <strong style="color:#00ff88;font-size:18px;">' + parseFloat(converted).toLocaleString('id-ID') + ' ' + to + '</strong><br><br><small style="color:var(--text-dim);">⚠️ Rate offline</small>';
+        showToast('💱 (offline)');
+    }
+}
+
+/* ============================================
+   TOOL 29 — POMODORO TIMER
+   ============================================ */
+let pomodoroInterval = null;
+let pomodoroTime = 25 * 60;
+let pomodoroRunning = false;
+let pomodoroMode = 'work';
+
+function renderPomodoro(el) {
+    el.innerHTML = '<div style="text-align:center;"><div id="pomoMode" style="font-size:18px;color:#a855f7;font-weight:bold;margin-bottom:15px;letter-spacing:2px;">⏰ WAKTU KERJA</div><div id="pomoDisplay" style="font-size:72px;font-weight:900;font-family:monospace;background:linear-gradient(90deg,#00d4ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:20px;">25:00</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="action-btn" id="pomoBtn" onclick="togglePomodoro()">▶️ START</button><button class="action-btn secondary" onclick="resetPomodoro()">🔄 RESET</button></div><div style="margin-top:25px;padding-top:20px;border-top:1px dashed var(--border);"><button class="action-btn secondary" onclick="setPomodoroMode(\'work\')" style="font-size:11px;padding:8px 15px;">⏰ 25 MIN</button><button class="action-btn secondary" onclick="setPomodoroMode(\'short\')" style="font-size:11px;padding:8px 15px;">☕ 5 MIN</button><button class="action-btn secondary" onclick="setPomodoroMode(\'long\')" style="font-size:11px;padding:8px 15px;">🛋️ 15 MIN</button></div></div>';
+    updatePomodoroDisplay();
+}
+
+function updatePomodoroDisplay() {
+    const display = document.getElementById('pomoDisplay');
+    if (!display) return;
+    const m = Math.floor(pomodoroTime / 60);
+    const s = pomodoroTime % 60;
+    display.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    const mode = document.getElementById('pomoMode');
+    if (mode) {
+        if (pomodoroMode === 'work') mode.textContent = '⏰ WAKTU KERJA';
+        else if (pomodoroMode === 'short') mode.textContent = '☕ ISTIRAHAT PENDEK';
+        else mode.textContent = '🛋️ ISTIRAHAT PANJANG';
+    }
+}
+
+function togglePomodoro() {
+    const btn = document.getElementById('pomoBtn');
+    if (pomodoroRunning) {
+        clearInterval(pomodoroInterval);
+        pomodoroRunning = false;
+        if (btn) btn.textContent = '▶️ START';
+        showToast('⏸️ Dijeda');
+    } else {
+        pomodoroRunning = true;
+        if (btn) btn.textContent = '⏸️ PAUSE';
+        showToast('▶️ Berjalan!');
+        pomodoroInterval = setInterval(() => {
+            if (pomodoroTime > 0) { pomodoroTime--; updatePomodoroDisplay(); }
+            else {
+                clearInterval(pomodoroInterval);
+                pomodoroRunning = false;
+                if (btn) btn.textContent = '▶️ START';
+                triggerLightning();
+                showToast('⏰ WAKTU HABIS!');
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.frequency.value = 800;
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(); osc.stop(ctx.currentTime + 1);
+                } catch(e) {}
+            }
+        }, 1000);
+    }
+}
+
+function resetPomodoro() {
+    clearInterval(pomodoroInterval);
+    pomodoroRunning = false;
+    setPomodoroMode(pomodoroMode);
+    const btn = document.getElementById('pomoBtn');
+    if (btn) btn.textContent = '▶️ START';
+    showToast('🔄 Reset');
+}
+
+function setPomodoroMode(mode) {
+    clearInterval(pomodoroInterval);
+    pomodoroRunning = false;
+    pomodoroMode = mode;
+    if (mode === 'work') pomodoroTime = 25 * 60;
+    else if (mode === 'short') pomodoroTime = 5 * 60;
+    else pomodoroTime = 15 * 60;
+    const btn = document.getElementById('pomoBtn');
+    if (btn) btn.textContent = '▶️ START';
+    updatePomodoroDisplay();
+}
+
+/* ============================================
+   TOOL 30 — CALCULATOR
+   ============================================ */
+let calcExpr = '';
+
+function renderCalc(el) {
+    el.innerHTML = '<div class="form-group"><input type="text" class="form-input" id="calcDisplay" value="0" readonly style="font-size:24px;text-align:right;font-family:monospace;height:60px;"></div><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;"><button class="action-btn secondary" onclick="calcInput(\'sin(\')">sin</button><button class="action-btn secondary" onclick="calcInput(\'cos(\')">cos</button><button class="action-btn secondary" onclick="calcInput(\'tan(\')">tan</button><button class="action-btn secondary" onclick="calcInput(\'log(\')">log</button><button class="action-btn secondary" onclick="calcInput(\'sqrt(\')">√</button><button class="action-btn secondary" onclick="calcInput(\'(\')">(</button><button class="action-btn secondary" onclick="calcInput(\')\')">)</button><button class="action-btn secondary" onclick="calcInput(\'^\')">^</button><button class="action-btn secondary" onclick="calcInput(\'%\')">%</button><button class="action-btn danger" onclick="calcClear()">C</button><button class="action-btn" onclick="calcInput(\'7\')">7</button><button class="action-btn" onclick="calcInput(\'8\')">8</button><button class="action-btn" onclick="calcInput(\'9\')">9</button><button class="action-btn secondary" onclick="calcInput(\'/\')">÷</button><button class="action-btn danger" onclick="calcDelete()">⌫</button><button class="action-btn" onclick="calcInput(\'4\')">4</button><button class="action-btn" onclick="calcInput(\'5\')">5</button><button class="action-btn" onclick="calcInput(\'6\')">6</button><button class="action-btn secondary" onclick="calcInput(\'*\')">×</button><button class="action-btn secondary" onclick="calcInput(\'pi\')">π</button><button class="action-btn" onclick="calcInput(\'1\')">1</button><button class="action-btn" onclick="calcInput(\'2\')">2</button><button class="action-btn" onclick="calcInput(\'3\')">3</button><button class="action-btn secondary" onclick="calcInput(\'-\')">−</button><button class="action-btn secondary" onclick="calcInput(\'e\')">e</button><button class="action-btn" onclick="calcInput(\'0\')" style="grid-column:span 2;">0</button><button class="action-btn" onclick="calcInput(\'.\')">.</button><button class="action-btn secondary" onclick="calcInput(\'+\')">+</button><button class="action-btn" onclick="calcEqual()" style="background:linear-gradient(135deg,#00ff88,#00d4ff);">=</button></div><div class="result-box" id="calcResult"></div>';
+    calcExpr = '';
+}
+
+function calcInput(val) {
+    if (calcExpr === '0' && val !== '.') calcExpr = '';
+    calcExpr += val;
+    document.getElementById('calcDisplay').value = calcExpr;
+}
+function calcClear() {
+    calcExpr = '';
+    document.getElementById('calcDisplay').value = '0';
+    document.getElementById('calcResult').classList.remove('show');
+}
+function calcDelete() {
+    calcExpr = calcExpr.slice(0, -1);
+    document.getElementById('calcDisplay').value = calcExpr || '0';
+}
+function calcEqual() {
+    try {
+        let expr = calcExpr.replace(/sin\(/g, 'Math.sin(').replace(/cos\(/g, 'Math.cos(').replace(/tan\(/g, 'Math.tan(').replace(/log\(/g, 'Math.log10(').replace(/sqrt\(/g, 'Math.sqrt(').replace(/\^/g, '**').replace(/pi/g, 'Math.PI').replace(/(?<![a-zA-Z])e(?![a-zA-Z])/g, 'Math.E');
+        const result = Function('"use strict"; return (' + expr + ')')();
+        if (isNaN(result) || !isFinite(result)) throw new Error('Invalid');
+        const rb = document.getElementById('calcResult');
+        rb.classList.add('show');
+        rb.innerHTML = '<span class="result-label">Hasil:</span>' + calcExpr + ' = <strong style="color:#00ff88;font-size:18px;">' + result + '</strong>';
+        calcExpr = String(result);
+        document.getElementById('calcDisplay').value = calcExpr;
+        showToast('🧮 = ' + result);
+    } catch (e) {
+        const rb = document.getElementById('calcResult');
+        rb.classList.add('show');
+        rb.innerHTML = '<span class="result-label" style="color:#ff006e;">❌ ERROR</span>';
+        showToast('❌ Error!');
+    }
+}
+
+/* ============================================
+   TOOL 31 — TEXT TOOLS
+   ============================================ */
+function renderText(el) {
+    el.innerHTML = '<div class="form-group"><label class="form-label">Masukkan Teks</label><textarea class="form-textarea" id="textInput" placeholder="Ketik teks di sini..." oninput="analyzeText()" style="min-height:150px;"></textarea></div><div class="result-box show" id="textStats"></div><div style="margin-top:15px;"><button class="action-btn secondary" onclick="textTransform(\'upper\')">UPPER</button><button class="action-btn secondary" onclick="textTransform(\'lower\')">lower</button><button class="action-btn secondary" onclick="textTransform(\'title\')">Title</button><button class="action-btn secondary" onclick="textTransform(\'reverse\')">Reverse</button><button class="action-btn secondary" onclick="copyText()">📋 Copy</button><button class="action-btn secondary" onclick="clearText()">🗑️ Clear</button></div>';
+    analyzeText();
+}
+
+function analyzeText() {
+    const input = document.getElementById('textInput');
+    if (!input) return;
+    const text = input.value;
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    document.getElementById('textStats').innerHTML = '<span class="result-label">📊 Statistik:</span>🔤 Karakter: <strong>' + text.length + '</strong><br>📝 Kata: <strong>' + words + '</strong><br>📄 Baris: <strong>' + (text ? text.split('\n').length : 0) + '</strong><br>⏱️ Waktu baca: <strong>~' + Math.ceil(words / 200) + ' menit</strong>';
+}
+function textTransform(type) {
+    const input = document.getElementById('textInput');
+    if (!input || !input.value) { showToast('⚠️ Isi teks!'); return; }
+    let text = input.value;
+    if (type === 'upper') input.value = text.toUpperCase();
+    else if (type === 'lower') input.value = text.toLowerCase();
+    else if (type === 'title') input.value = text.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.substr(1).toLowerCase());
+    else if (type === 'reverse') input.value = text.split('').reverse().join('');
+    analyzeText();
+    showToast('✅ Diubah!');
+}
+function copyText() {
+    const input = document.getElementById('textInput');
+    if (!input || !input.value) { showToast('⚠️ Kosong!'); return; }
+    navigator.clipboard.writeText(input.value);
+    showToast('📋 Di-copy!');
+}
+function clearText() {
+    document.getElementById('textInput').value = '';
+    analyzeText();
+    showToast('🗑️ Dihapus!');
+}
+
+/* ============================================
+   TOOL 32 — NOTES
+   ============================================ */
+let notesData = [];
+let activeNoteId = null;
+
+function renderNotes(el) {
+    el.innerHTML = '<button class="action-btn" onclick="createNote()">➕ Catatan Baru</button><div class="badge-count" id="notesCount">0 Catatan</div><div id="notesList" style="margin-bottom:15px;max-height:150px;overflow-y:auto;"></div><div id="noteEditor" style="display:none;"><div class="form-group"><label class="form-label">Judul</label><input type="text" class="form-input" id="noteTitle" placeholder="Judul..."></div><div class="form-group"><label class="form-label">Isi</label><textarea class="form-textarea" id="noteContent" placeholder="Tulis catatan..." style="min-height:150px;"></textarea></div><button class="action-btn" onclick="saveNote()">💾 Simpan</button><button class="action-btn danger" onclick="deleteNote()">🗑️ Hapus</button></div>';
+    loadNotes();
+}
+
+function getNotesData() { try { return JSON.parse(localStorage.getItem('deppsekNotes') || '[]'); } catch(e) { return []; } }
+function saveNotesData() { localStorage.setItem('deppsekNotes', JSON.stringify(notesData)); }
+
+function loadNotes() {
+    notesData = getNotesData();
+    const list = document.getElementById('notesList');
+    const count = document.getElementById('notesCount');
+    if (!list) return;
+    count.textContent = notesData.length + ' Catatan';
+    if (notesData.length === 0) { list.innerHTML = '<p style="text-align:center;color:var(--text-dim);padding:15px;font-size:13px;">Belum ada catatan</p>'; return; }
+    list.innerHTML = notesData.map(n => '<div onclick="openNote(' + n.id + ')" style="padding:10px 12px;background:' + (n.id === activeNoteId ? 'rgba(0,212,255,0.2)' : 'rgba(0,212,255,0.05)') + ';border:1px solid ' + (n.id === activeNoteId ? '#00d4ff' : 'var(--border)') + ';border-radius:8px;margin-bottom:6px;cursor:pointer;"><strong style="color:#00d4ff;font-size:13px;">📝 ' + escapeHtml(n.title || 'Tanpa Judul') + '</strong><p style="font-size:11px;color:var(--text-dim);margin-top:3px;">' + escapeHtml((n.content || '').substring(0, 50)) + '</p></div>').join('');
+}
+
+function createNote() {
+    const newNote = { id: Date.now(), title: '', content: '' };
+    notesData.push(newNote);
+    saveNotesData();
+    openNote(newNote.id);
+    loadNotes();
+    showToast('📔 Dibuat!');
+}
+
+function openNote(id) {
+    const note = notesData.find(n => n.id === id);
+    if (!note) return;
+    activeNoteId = id;
+    document.getElementById('noteEditor').style.display = 'block';
+    document.getElementById('noteTitle').value = note.title;
+    document.getElementById('noteContent').value = note.content;
+    loadNotes();
+}
+
+function saveNote() {
+    if (!activeNoteId) return;
+    const note = notesData.find(n => n.id === activeNoteId);
+    if (!note) return;
+    note.title = document.getElementById('noteTitle').value;
+    note.content = document.getElementById('noteContent').value;
+    saveNotesData();
+    loadNotes();
+    showToast('💾 Tersimpan!');
+}
+
+function deleteNote() {
+    if (!activeNoteId) return;
+    if (!confirm('Hapus catatan ini?')) return;
+    notesData = notesData.filter(n => n.id !== activeNoteId);
+    activeNoteId = null;
+    saveNotesData();
+    document.getElementById('noteEditor').style.display = 'none';
+    loadNotes();
+    showToast('🗑️ Dihapus!');
+}
+
+document.addEventListener('input', (e) => {
+    if (e.target.id === 'noteTitle' || e.target.id === 'noteContent') {
+        clearTimeout(window._noteTimer);
+        window._noteTimer = setTimeout(() => { if (activeNoteId) saveNote(); }, 1000);
+    }
+});
+
+/* ============================================
+   UTIL
+   ============================================ */
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+console.log('%c⚡ DEPPSEK TOOLS — GOD EDITION ⚡', 'color:#00d4ff;font-size:22px;font-weight:bold;');
+console.log('%c🔐 LOGIN: VINZXCYY / deppsek2025', 'color:#00ff88;font-size:14px;');
+console.log('%c🎯 10 Tools Ready!', 'color:#a855f7;font-size:14px;');
+</script>
+
+</body>
+</html>
